@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rociospanish1-lgtm.github.io/robosiega/sitemap.xml
