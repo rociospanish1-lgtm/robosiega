@@ -1,0 +1,461 @@
+<!doctype html>
+<title>RoboSiega</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#EEF1EA;
+    --surface:#FFFFFF;
+    --ink:#152420;
+    --ink-soft:#4C5D57;
+    --line:rgba(21,36,32,0.14);
+    --accent:#2F7D42;
+    --accent-ink:#0E3618;
+    --blue:#2C5AA0;
+    --blue-soft:#E7EDF7;
+    --accent-soft:#DEEBE1;
+    --warn:#9A5B12;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10160F;
+      --surface:#171F17;
+      --ink:#E9F1E9;
+      --ink-soft:#A7B7AC;
+      --line:rgba(233,241,233,0.14);
+      --accent:#5FBD6B;
+      --accent-ink:#DFF5E3;
+      --blue:#7CA6E0;
+      --blue-soft:#1B2636;
+      --accent-soft:#1B3421;
+      --warn:#D89A4E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#10160F;
+    --surface:#171F17;
+    --ink:#E9F1E9;
+    --ink-soft:#A7B7AC;
+    --line:rgba(233,241,233,0.14);
+    --accent:#5FBD6B;
+    --accent-ink:#DFF5E3;
+    --blue:#7CA6E0;
+    --blue-soft:#1B2636;
+    --accent-soft:#1B3421;
+    --warn:#D89A4E;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:Archivo, "Helvetica Neue", Arial, sans-serif;
+    line-height:1.5;
+    padding-inline:20px;
+  }
+  a{color:inherit;}
+  .wrap{max-width:960px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--blue);
+  }
+
+  h1,h2,h3{
+    font-family:"Big Shoulders Display", Archivo, sans-serif;
+    font-weight:800;
+    text-transform:uppercase;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+
+  /* ---------- Hero: blueprint plan of a mowed lawn ---------- */
+  .hero{
+    position:relative;
+    padding-block:44px 36px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .plan{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:2px;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/28px 28px,
+      var(--surface);
+    padding:28px 24px 24px;
+  }
+  .plan svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+  .plan-tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
+    letter-spacing:0.04em;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 6.4vw, 3.6rem);
+    line-height:0.98;
+    margin-top:14px;
+    max-width:14ch;
+  }
+  .hero h1 span{color:var(--accent);}
+  .hero p.lede{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+    margin-top:14px;
+  }
+  .hero-meta{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:18px;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+  .hero-meta b{color:var(--ink);font-weight:600;}
+  .cta-row{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.82rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    padding:11px 18px;
+    border-radius:2px;
+    text-decoration:none;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--accent);color:var(--accent-ink);}
+  .btn-ghost{border-color:var(--line);color:var(--ink);}
+
+  /* ---------- Zone cards ---------- */
+  section{padding-block:40px;border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{margin-bottom:22px;max-width:56ch;}
+  .section-head h2{font-size:clamp(1.5rem,3.6vw,2rem);margin-top:6px;}
+  .section-head p{color:var(--ink-soft);margin-top:8px;}
+
+  .zones{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:720px){.zones{grid-template-columns:1fr;}}
+  .zone{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-top:3px solid var(--blue);
+    padding:18px 16px;
+    border-radius:2px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .zone .m2{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:1.5rem;
+    font-weight:600;
+    color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .zone .m2 small{font-size:0.62rem;color:var(--ink-soft);display:block;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-top:2px;}
+  .zone p{margin:0;color:var(--ink-soft);font-size:0.9rem;}
+  .zone .rec{
+    font-size:0.82rem;
+    color:var(--ink);
+    border-top:1px dashed var(--line);
+    padding-top:10px;
+    margin-top:auto;
+  }
+  .rec b{color:var(--accent);}
+
+  /* ---------- Table ---------- */
+  .table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:2px;}
+  table{width:100%;border-collapse:collapse;min-width:640px;background:var(--surface);}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:0.88rem;vertical-align:top;}
+  thead th{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:var(--accent-soft);
+    border-bottom:1px solid var(--line);
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  td.num{font-family:"IBM Plex Mono", monospace;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  td.model{font-weight:600;}
+  td.model small{display:block;font-weight:400;color:var(--ink-soft);font-size:0.78rem;}
+  .tech-pill{
+    display:inline-block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    padding:2px 7px;
+    border-radius:2px;
+    background:var(--blue-soft);
+    color:var(--blue);
+    white-space:nowrap;
+  }
+  .row-link{font-size:0.78rem;font-family:"IBM Plex Mono", monospace;text-decoration:underline;text-underline-offset:2px;color:var(--blue);white-space:nowrap;}
+  .table-note{font-size:0.78rem;color:var(--ink-soft);margin-top:10px;}
+
+  /* ---------- Explainer ---------- */
+  .explain{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:720px){.explain{grid-template-columns:1fr;}}
+  .explain .card{background:var(--surface);border:1px solid var(--line);padding:18px 16px;border-radius:2px;}
+  .explain .card h3{font-size:1rem;color:var(--ink);margin-bottom:8px;text-transform:none;font-family:Archivo;font-weight:700;}
+  .explain .card p{margin:0 0 8px;color:var(--ink-soft);font-size:0.9rem;}
+  .explain .card ul{margin:0;padding-left:18px;color:var(--ink-soft);font-size:0.88rem;}
+  .explain .card li{margin-bottom:4px;}
+
+  /* ---------- FAQ ---------- */
+  details{
+    border-bottom:1px solid var(--line);
+    padding-block:14px;
+  }
+  details:first-of-type{border-top:1px solid var(--line);}
+  summary{
+    cursor:pointer;
+    font-weight:600;
+    font-size:0.96rem;
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    list-style:none;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary::after{
+    content:"+";
+    font-family:"IBM Plex Mono", monospace;
+    color:var(--accent);
+    flex:none;
+  }
+  details[open] summary::after{content:"–";}
+  details p{color:var(--ink-soft);margin:10px 0 0;font-size:0.92rem;max-width:62ch;}
+
+  footer{padding-block:28px 40px;}
+  .disclosure{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+    padding-top:18px;
+    max-width:68ch;
+  }
+  .disclosure b{color:var(--ink);}
+  .brand-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .brand-line .name{font-family:"Big Shoulders Display", sans-serif;font-weight:800;font-size:1.1rem;text-transform:uppercase;}
+</style>
+
+<div class="wrap">
+
+  <section class="hero" style="border-bottom:1px solid var(--line);padding-top:36px;">
+    <div class="plan">
+      <svg viewBox="0 0 400 90" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M14 70 L14 20 L120 14 L210 26 L300 16 L386 24 L386 76 L60 82 Z"
+              fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 4" opacity="0.75"/>
+        <circle cx="14" cy="70" r="2.4" fill="var(--blue)"/>
+        <circle cx="386" cy="24" r="2.4" fill="var(--blue)"/>
+        <circle cx="60" cy="82" r="2.4" fill="var(--blue)"/>
+      </svg>
+      <span class="plan-tag">PARCELA · 640&nbsp;m² · LÍMITE RTK</span>
+      <div class="eyebrow" style="margin-top:16px;">Guía de compra — España, 2026</div>
+      <h1>Qué robot<br>cortacésped<br><span>comprar este año</span></h1>
+      <p class="lede">Seis modelos, comparados por superficie de corte, pendiente máxima y precio real en España. Sin marcas patrocinadas: los datos de cada fabricante, uno junto al otro.</p>
+      <div class="hero-meta">
+        <span><b>6</b> modelos comparados</span>
+        <span><b>599–3.499&nbsp;€</b> rango de precio</span>
+        <span><b>2</b> tecnologías: cable / RTK GPS</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#comparativa">Ver la comparativa</a>
+        <a class="btn btn-ghost" href="#por-jardin">Elegir por tamaño de jardín</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="por-jardin">
+    <div class="section-head">
+      <div class="eyebrow">Paso 1</div>
+      <h2>Elige por el tamaño de tu jardín</h2>
+      <p>La superficie y la pendiente deciden la tecnología antes que el presupuesto. Estos son los tres rangos habituales en parcelas españolas.</p>
+    </div>
+    <div class="zones">
+      <div class="zone">
+        <div class="m2">≤ 500 <small>metros cuadrados</small></div>
+        <p>Parcela pequeña o mediana urbana. El cable perimetral sigue siendo la opción más barata y con menos que instalar mal.</p>
+        <div class="rec">Cable perimetral · <b>599–1.000&nbsp;€</b><br>Worx Landroid M500 o Gardena Sileno City</div>
+      </div>
+      <div class="zone">
+        <div class="m2">500–1.500 <small>metros cuadrados</small></div>
+        <p>Jardín grande o con bordes irregulares. El RTK GPS evita instalar cable y remapea en minutos si cambias un parterre.</p>
+        <div class="rec">RTK GPS sin cable · <b>1.499–2.799&nbsp;€</b><br>Segway Navimow H800E o Husqvarna Automower 430X</div>
+      </div>
+      <div class="zone">
+        <div class="m2">&gt; 1.500 <small>metros cuadrados o pendiente &gt;35%</small></div>
+        <p>Fincas grandes o terreno irregular. Aquí entra la tracción a las cuatro ruedas y la navegación con LiDAR.</p>
+        <div class="rec">RTK + tracción 4WD · <b>2.299–3.499&nbsp;€</b><br>Mammotion LUBA 3 AWD</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="comparativa">
+    <div class="section-head">
+      <div class="eyebrow">Paso 2</div>
+      <h2>Comparativa de modelos</h2>
+      <p>Superficie máxima homologada por el fabricante, tecnología de navegación y precio de referencia en el mercado español.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Modelo</th>
+            <th>Superficie máx.</th>
+            <th>Navegación</th>
+            <th>Precio orient.</th>
+            <th>Enlace</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-modelos">
+          <tr data-query="Worx Landroid M500 WR141E robot cortacésped">
+            <td class="model">Worx Landroid M500<small>WR141E</small></td>
+            <td class="num">500 m²</td>
+            <td><span class="tech-pill">Cable perimetral</span></td>
+            <td class="num">599 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+          <tr data-query="Gardena Sileno City robot cortacésped">
+            <td class="model">Gardena Sileno City<small>500 / 250</small></td>
+            <td class="num">500 m²</td>
+            <td><span class="tech-pill">Cable + mapeo IA</span></td>
+            <td class="num">800–1.000 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+          <tr data-query="Husqvarna Automower 305 robot cortacésped">
+            <td class="model">Husqvarna Automower 305</td>
+            <td class="num">600 m²</td>
+            <td><span class="tech-pill">Cable perimetral</span></td>
+            <td class="num">899 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+          <tr data-query="Segway Navimow H800E robot cortacésped">
+            <td class="model">Segway Navimow<small>H800E</small></td>
+            <td class="num">800 m²</td>
+            <td><span class="tech-pill">RTK GPS sin cable</span></td>
+            <td class="num">1.499 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+          <tr data-query="Husqvarna Automower 430X NERA robot cortacésped">
+            <td class="model">Husqvarna Automower<small>430X NERA</small></td>
+            <td class="num">3.200 m²</td>
+            <td><span class="tech-pill">RTK GPS sin cable</span></td>
+            <td class="num">2.799 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+          <tr data-query="Mammotion LUBA 3 AWD robot cortacésped">
+            <td class="model">Mammotion LUBA 3<small>AWD</small></td>
+            <td class="num">1.500–5.000 m²</td>
+            <td><span class="tech-pill">RTK + LiDAR + 4WD</span></td>
+            <td class="num">2.299–3.499 €</td>
+            <td><a class="row-link" data-amazon href="#">Ver precio →</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Precios orientativos a fecha de publicación — Amazon actualiza el precio en cada visita a la ficha del producto.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Antes de decidir</div>
+      <h2>Cable perimetral o RTK GPS</h2>
+      <p>La diferencia real no es la marca, es cómo el robot sabe dónde están los límites de tu jardín.</p>
+    </div>
+    <div class="explain">
+      <div class="card">
+        <h3>Cable perimetral</h3>
+        <p>Un cable fino se entierra o se fija con piquetas alrededor del jardín y de cualquier zona a evitar. La instalación manual suele llevar 2–4 horas.</p>
+        <ul>
+          <li>Más barato: desde 599 €</li>
+          <li>El robot nunca sale de la zona marcada</li>
+          <li>Mover un límite implica recolocar cable</li>
+          <li>Bordes muy irregulares quedan menos precisos</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>RTK GPS sin cable</h3>
+        <p>Una estación base fija corrige la posición del robot por satélite con precisión centimétrica. El límite se dibuja caminando una vez con el propio robot o desde la app.</p>
+        <ul>
+          <li>Sin obras: mapeo en 20–30 minutos</li>
+          <li>Redibujar un límite es editar el mapa</li>
+          <li>Necesita visión de cielo despejada para la base</li>
+          <li>Entrada de precio más alta: desde 1.499 €</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Preguntas frecuentes</div>
+      <h2>Antes de comprar</h2>
+    </div>
+
+    <details open>
+      <summary>¿Todos los modelos necesitan cable?</summary>
+      <p>No. Los modelos con RTK GPS (Segway Navimow, Husqvarna NERA, Mammotion LUBA) no llevan cable perimetral: el límite se define por software. Los modelos de entrada (Worx Landroid, Automower 305, Gardena Sileno) sí lo necesitan.</p>
+    </details>
+    <details>
+      <summary>¿Qué pendiente máxima soportan?</summary>
+      <p>Los modelos de cable suelen homologar hasta 35% de pendiente. Los RTK con tracción simple llegan a 40–45%. Solo los modelos 4WD, como el Mammotion LUBA 3 AWD, superan ese rango con seguridad.</p>
+    </details>
+    <details>
+      <summary>¿Cuánto dura la batería y cuánto tarda en cargar?</summary>
+      <p>Entre 60 y 120 minutos de corte por carga según el modelo, con recarga automática en la base cuando queda batería. Un jardín de tamaño medio se corta en 2–3 sesiones repartidas por semana.</p>
+    </details>
+    <details>
+      <summary>¿Qué mantenimiento pide?</summary>
+      <p>Cambiar las cuchillas cada 4–8 semanas de uso, limpiar los sensores tras cortar hojas o barro, y revisar la estación base al empezar la temporada. Es el gasto recurrente real, más allá del precio de compra.</p>
+    </details>
+    <details>
+      <summary>¿Y si me lo roban del jardín?</summary>
+      <p>La mayoría de modelos de gama media y alta incluyen PIN de desbloqueo, alarma sonora al levantarlo y localización por GPS. Los modelos de entrada más baratos no siempre lo incluyen — conviene revisarlo en la ficha antes de comprar.</p>
+    </details>
+  </section>
+
+  <footer>
+    <div class="brand-line">
+      <span class="name">RoboSiega</span>
+      <span class="eyebrow" style="color:var(--ink-soft);">Guía independiente de compra</span>
+    </div>
+    <p class="disclosure">
+      <b>Aviso:</b> Rocío Pineda es participante en el Programa de Afiliados de Amazon EU, un programa de publicidad para afiliados diseñado para ofrecer a los sitios web un modo de obtener comisiones por publicidad, publicitando e incluyendo enlaces a Amazon.es. Los precios mostrados son orientativos y pueden variar; el precio final es siempre el que muestra Amazon en el momento de la compra.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  var AMAZON_TAG = ""; // al aprobar el alta de Amazon Afiliados, pega aquí el ID (ej. "robosiega-21")
+
+  function amazonSearchUrl(query){
+    var url = "https://www.amazon.es/s?k=" + encodeURIComponent(query);
+    return AMAZON_TAG ? url + "&tag=" + encodeURIComponent(AMAZON_TAG) : url;
+  }
+
+  document.querySelectorAll("tr[data-query]").forEach(function(row){
+    var link = row.querySelector("a[data-amazon]");
+    if (link) link.setAttribute("href", amazonSearchUrl(row.getAttribute("data-query")));
+  });
+</script>
