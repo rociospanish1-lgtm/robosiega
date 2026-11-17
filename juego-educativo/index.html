@@ -100,6 +100,16 @@ td,th{padding:6px;border-bottom:1px solid #dee2e6;text-align:left}
 .fx span{position:absolute;top:-40px;animation:fall 2.1s ease-in forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
 button:disabled{cursor:default}
+
+.wi{display:block;width:100%;font-size:2.2rem;text-align:center;padding:18px 10px;border:4px dashed #adb5bd;border-radius:18px;margin:10px 0;font-family:inherit;font-weight:700;color:#2b2d42;background:#fff}
+.wi:focus{outline:none;border-color:#4c6ef5;background:#edf2ff}
+.wi.okw{border:4px solid #2f9e44;background:#d3f9d8}.wi.badw{border:4px solid #e03131;background:#ffe3e3}
+.padbox{margin-top:10px}
+.pad{width:100%;height:auto;aspect-ratio:2/1;display:block;background:#fff;background-image:linear-gradient(#d0ebff 1px,transparent 1px);background-size:100% 44px;border:3px dashed #adb5bd;border-radius:14px;touch-action:none;cursor:crosshair}
+.story{text-align:center}
+.chap{font-weight:800;color:#f76707;letter-spacing:.08em;text-transform:uppercase}
+.tale{font-size:1.25rem;line-height:1.5;text-align:center;margin:8px 4px}
+.mission{background:#fff3bf;border-radius:14px;padding:10px;font-weight:700;font-size:1.15rem;margin:10px 0}
 </style>
 </head>
 <body>
@@ -124,16 +134,17 @@ function numWrongs(c,max){
 const numQ=(q,c,vis,max)=>mc(q,c,numWrongs(c,max),vis);
 
 /* ============ contenido original ============ */
-const OBJ=['🍎','⭐','🐟','🚗','🎈','🐞','🍪','🌸'];
-const NOMBRES=['Ana','Leo','Mía','Hugo','Lola','Pablo'];
-const ITEMS=[['manzanas','🍎'],['cromos','🃏'],['canicas','🔮'],['galletas','🍪'],['globos','🎈'],['lápices','✏️']];
+const OBJ=['🚗','🏎️','⚽','🏁','🚙','🏆','⭐','🧱'];
+const who=()=>Math.random()<.65&&S?esc(S.name):pick(['Cristiano','Turbo','Lucía']);
+const ITEMS=[['coches','🚗'],['balones','⚽'],['goles','🥅'],['bloques','🧱'],['cromos','🃏'],['trofeos','🏆'],['banderines','🏁'],['botas','👟']];
 
 const WORDS1=[ // emoji, palabra, sílabas
  ['🍎','manzana',['man','za','na']],['🐱','gato',['ga','to']],['🏠','casa',['ca','sa']],['☀️','sol',['sol']],
  ['🌙','luna',['lu','na']],['🐶','perro',['pe','rro']],['🐟','pez',['pez']],['🚗','coche',['co','che']],
  ['🌳','árbol',['ár','bol']],['🍌','plátano',['plá','ta','no']],['🐴','caballo',['ca','ba','llo']],['⚽','pelota',['pe','lo','ta']],
  ['🚲','bici',['bi','ci']],['🍞','pan',['pan']],['🐘','elefante',['e','le','fan','te']],['📖','libro',['li','bro']],
- ['🦋','mariposa',['ma','ri','po','sa']],['🍇','uva',['u','va']],['🐢','tortuga',['tor','tu','ga']],['🎈','globo',['glo','bo']]
+ ['🦋','mariposa',['ma','ri','po','sa']],['🍇','uva',['u','va']],['🐢','tortuga',['tor','tu','ga']],['🎈','globo',['glo','bo']],
+ ['⚽','balón',['ba','lón']],['🏆','copa',['co','pa']],['🥇','medalla',['me','da','lla']],['👟','bota',['bo','ta']],['🥅','portería',['por','te','rí','a']],['🏁','meta',['me','ta']]
 ];
 const VOWELS=[['c_sa','a','casa'],['p_lo','e','pelo'],['l_na','u','luna'],['m_sa','e','mesa'],['s_l','o','sol'],['p_ta','a','pata'],['b_ca','o','boca'],['m_no','a','mano'],['d_do','e','dedo'],['l_bro','i','libro'],['p_n','a','pan'],['t_ma','o','toma']];
 const PLURAL1=[['el gato','los gatos'],['la casa','las casas'],['el perro','los perros'],['la flor','las flores'],['el libro','los libros'],['la mesa','las mesas'],['el niño','los niños'],['la luna','las lunas'],['el pez','los peces']];
@@ -160,25 +171,25 @@ const M1=[
    if(Math.random()<.5){const it=uniq(3,m),asc=Math.random()<.5;return {type:'order',q:asc?'Toca los números de MENOR a MAYOR':'Toca los números de MAYOR a MENOR',items:it,sorted:it.slice().sort((a,b)=>asc?a-b:b-a)}}
    let a=rnd(1,m),b=rnd(1,m);while(a===b)b=rnd(1,m);const may=Math.random()<.5;return mc(may?'¿Cuál es MAYOR?':'¿Cuál es MENOR?',may?Math.max(a,b):Math.min(a,b),[a,b],a+'  ó  '+b)}},
  {name:'Sumas',icon:'➕',gen:d=>{const m=lerp(10,20,d);const a=rnd(1,m-1),b=rnd(1,m-a);
-   if(Math.random()<.4)return {type:'slider',q:`${a} + ${b} = ?  Mueve el control hasta el resultado`,target:a+b,min:0,max:20};
+   {const r=Math.random();if(r<.3)return {type:'slider',q:`${a} + ${b} = ?  Mueve el control hasta el resultado`,target:a+b,min:0,max:20};if(r<.55)return {type:'write',q:`${a} + ${b} = ?  Escribe el resultado`,answer:String(a+b),numeric:true};}
    return numQ(`${a} + ${b} = ?`,a+b,'',40)}},
  {name:'Restas',icon:'➖',gen:d=>{const m=lerp(10,20,d);const a=rnd(2,m),b=rnd(1,a);
-   if(Math.random()<.4)return {type:'slider',q:`${a} − ${b} = ?  Mueve el control hasta el resultado`,target:a-b,min:0,max:20};
+   {const r=Math.random();if(r<.3)return {type:'slider',q:`${a} − ${b} = ?  Mueve el control hasta el resultado`,target:a-b,min:0,max:20};if(r<.55)return {type:'write',q:`${a} − ${b} = ?  Escribe el resultado`,answer:String(a-b),numeric:true};}
    return numQ(`${a} − ${b} = ?`,a-b,'',40)}},
  {name:'Series',icon:'🪜',gen:d=>{const st=pick(d<.5?[1,2]:[1,2,5,10]);const s=rnd(0,10);const seq=[0,1,2,3].map(i=>s+i*st);const hole=rnd(1,3);const c=seq[hole];const show=seq.map((x,i)=>i===hole?'❓':x).join(' , ');return numQ('¿Qué número falta?',c,show,200)}},
  {name:'Decenas y unidades',icon:'🧱',gen:d=>{const n=rnd(10,lerp(40,99,d));const dec=Math.floor(n/10),uni=n%10;return Math.random()<.5?numQ(`En el ${n}, ¿cuántas DECENAS hay?`,dec,'',9):numQ(`En el ${n}, ¿cuántas UNIDADES hay?`,uni,'',9)}},
  {name:'Figuras',icon:'🔺',gen:d=>{const f=[['triángulo','🔺',3],['cuadrado','🟦',4],['rectángulo','▬',4],['pentágono','⬟',5]];const x=pick(f);return numQ(`¿Cuántos lados tiene un ${x[0]}?`,x[2],x[1],8)}},
- {name:'Problemas',icon:'🧩',gen:d=>{const [it,e]=pick(ITEMS),n=pick(NOMBRES);const m=lerp(8,18,d);const a=rnd(2,m-1),b=rnd(1,m-a);if(Math.random()<.5)return numQ(`${n} tiene ${a} ${it} y le regalan ${b} más. ¿Cuántas tiene ahora?`,a+b,e.repeat(Math.min(a+b,12)),40);const a2=rnd(3,m),b2=rnd(1,a2-1);return numQ(`${n} tiene ${a2} ${it} y da ${b2}. ¿Cuántas le quedan?`,a2-b2,e.repeat(a2),40)}},
+ {name:'Problemas',icon:'🧩',gen:d=>{const [it,e]=pick(ITEMS),n=who();const m=lerp(8,18,d);const a=rnd(2,m-1),b=rnd(1,m-a);if(Math.random()<.5)return numQ(`${n} tiene ${a} ${it} y le regalan ${b} más. ¿Cuántas tiene ahora?`,a+b,e.repeat(Math.min(a+b,12)),40);const a2=rnd(3,m),b2=rnd(1,a2-1);return numQ(`${n} tiene ${a2} ${it} y da ${b2}. ¿Cuántas le quedan?`,a2-b2,e.repeat(a2),40)}},
  {name:'Recta numérica',icon:'🧭',gen:d=>{const max=d<.5?20:30;const t=rnd(1,max);return {type:'slider',q:`Mueve el control hasta el número ${t}`,target:t,min:0,max}}},
  {name:'Monedas',icon:'🪙',gen:d=>{const t=rnd(3,lerp(8,15,d));return {type:'coins',q:`Paga exactamente ${t} €. Toca las monedas`,target:t,coins:[1,2,5]}}},
  {name:'Relojes',icon:'🕒',gen:d=>{const h=rnd(1,12);return {type:'clock',h,half:false,q:`Pon el reloj a las ${h} en punto`}}}
 ];
 const M2=[
- {name:'Sumas hasta 100',icon:'➕',gen:d=>{let a,b;if(d<.4){a=rnd(10,60);b=rnd(1,9);}else{a=rnd(11,70);b=rnd(11,99-a>11?99-a:12);}if(a+b>100)b=100-a;return numQ(`${a} + ${b} = ?`,a+b,'',150)}},
- {name:'Restas hasta 100',icon:'➖',gen:d=>{const a=rnd(20,lerp(60,99,d));const b=rnd(2,a-1>Math.min(a,lerp(20,60,d))?lerp(20,60,d):a-1);return numQ(`${a} − ${b} = ?`,a-b,'',150)}},
+ {name:'Sumas hasta 100',icon:'➕',gen:d=>{let a,b;if(d<.4){a=rnd(10,60);b=rnd(1,9);}else{a=rnd(11,70);b=rnd(11,99-a>11?99-a:12);}if(a+b>100)b=100-a;if(Math.random()<.45)return {type:'write',q:`${a} + ${b} = ?  Escribe el resultado`,answer:String(a+b),numeric:true};return numQ(`${a} + ${b} = ?`,a+b,'',150)}},
+ {name:'Restas hasta 100',icon:'➖',gen:d=>{const a=rnd(20,lerp(60,99,d));const b=rnd(2,a-1>Math.min(a,lerp(20,60,d))?lerp(20,60,d):a-1);if(Math.random()<.45)return {type:'write',q:`${a} − ${b} = ?  Escribe el resultado`,answer:String(a-b),numeric:true};return numQ(`${a} − ${b} = ?`,a-b,'',150)}},
  {name:'Tablas',icon:'✖️',gen:d=>{const ts=d<.35?[2,10]:d<.7?[2,5,10,3]:[2,3,4,5,10];
    if(Math.random()<.4){const ps=[],seen=new Set();let g=0;while(ps.length<4&&g++<60){const t=pick(ts),n=rnd(1,10);if(!seen.has(t*n)){seen.add(t*n);ps.push([`${t} × ${n}`,String(t*n)])}}return pairsQ('Une cada multiplicación con su resultado',ps)}
-   const t=pick(ts),n=rnd(1,10);return numQ(`${t} × ${n} = ?`,t*n,'',110)}},
+   const t=pick(ts),n=rnd(1,10);if(Math.random()<.4)return {type:'write',q:`${t} × ${n} = ?  Escribe el resultado`,answer:String(t*n),numeric:true};return numQ(`${t} × ${n} = ?`,t*n,'',110)}},
  {name:'Centenas, decenas…',icon:'🏗️',gen:d=>{const c=rnd(1,9),de=rnd(0,9),u=rnd(0,9);const n=c*100+de*10+u;
    if(Math.random()<.5)return {type:'build',q:`Forma el número: ${c} centenas, ${de} decenas y ${u} unidades`,tiles:scr([c,de,u].map(String)),target:[c,de,u].map(String),slotLabels:['C','D','U'],join:''};
    const w=pick([['centenas',c],['decenas',de],['unidades',u]]);return numQ(`En el ${n}, ¿cuántas ${w[0]} hay?`,w[1],'',9)}},
@@ -186,10 +197,10 @@ const M2=[
    if(Math.random()<.5){const n=rnd(2,lerp(12,50,d));return numQ(`El DOBLE de ${n} es…`,n*2,'',120)}const n=rnd(1,lerp(10,40,d))*2;return numQ(`La MITAD de ${n} es…`,n/2,'',60)}},
  {name:'La hora',icon:'🕒',gen:d=>{const h=rnd(1,12);const half=d>.3&&Math.random()<.5;return {type:'clock',h,half,q:`Pon el reloj a las ${h} ${half?'y media':'en punto'}`}}},
  {name:'Dinero',icon:'💶',gen:d=>{const t=rnd(6,lerp(20,60,d));return {type:'coins',q:`Paga exactamente ${t} €. Toca las monedas`,target:t,coins:[1,2,5,10,20]}}},
- {name:'Problemas',icon:'🧩',gen:d=>{const [it,e]=pick(ITEMS),n=pick(NOMBRES);const t=rnd(0,2);if(t===0){const a=rnd(15,60),b=rnd(10,99-a);return numQ(`${n} tiene ${a} ${it} y consigue ${b} más. ¿Cuántas tiene?`,a+b,e,150)}if(t===1){const a=rnd(30,90),b=rnd(10,a-5);return numQ(`${n} tiene ${a} ${it} y pierde ${b}. ¿Cuántas le quedan?`,a-b,e,150)}const c=rnd(2,5),p=rnd(2,5);return numQ(`Hay ${c} cajas con ${p} ${it} en cada una. ¿Cuántas ${it} hay en total?`,c*p,e.repeat(Math.min(c*p,15)),40)}}
+ {name:'Problemas',icon:'🧩',gen:d=>{const [it,e]=pick(ITEMS),n=who();const t=rnd(0,2);if(t===0){const a=rnd(15,60),b=rnd(10,99-a);return numQ(`${n} tiene ${a} ${it} y consigue ${b} más. ¿Cuántas tiene?`,a+b,e,150)}if(t===1){const a=rnd(30,90),b=rnd(10,a-5);return numQ(`${n} tiene ${a} ${it} y pierde ${b}. ¿Cuántas le quedan?`,a-b,e,150)}const c=rnd(2,5),p=rnd(2,5);return numQ(`Hay ${c} cajas con ${p} ${it} en cada una. ¿Cuántas ${it} hay en total?`,c*p,e.repeat(Math.min(c*p,15)),40)}}
 ];
 const L1=[
- {name:'Letra inicial',icon:'🔤',gen:d=>{const w=pick(WORDS1);const l=w[1][0].toUpperCase();const abc='ABCDEFGHIJLMNOPRSTUV'.split('');return mc('¿Con qué letra empieza?',l,shuffle(abc),w[0])}},
+ {name:'Letra inicial',icon:'🔤',gen:d=>{const w=pick(WORDS1);if(Math.random()<.4)return {type:'write',q:'Escribe con qué letra empieza',vis:w[0],answer:w[1][0]};const l=w[1][0].toUpperCase();const abc='ABCDEFGHIJLMNOPRSTUV'.split('');return mc('¿Con qué letra empieza?',l,shuffle(abc),w[0])}},
  {name:'Vocales',icon:'🅰️',gen:d=>{const v=pick(VOWELS);return mc('¿Qué vocal falta?',v[1],'aeiou'.split(''),v[0].replace('_','＿'))}},
  {name:'Completa la sílaba',icon:'🧩',gen:d=>{const w=pick(WORDS1.filter(x=>x[2].length>=2));const i=w[2].length-1;const miss=w[2][i];const pool=WORDS1.flatMap(x=>x[2]).filter(s=>s!==miss&&s.length>=2);return mc('¿Qué sílaba falta?',miss,pool,w[0]+'  '+w[2].slice(0,i).join('-')+'-＿')}},
  {name:'Cuenta sílabas',icon:'👏',gen:d=>{const w=pick(WORDS1);return {type:'clap',q:'Da una palmada por cada sílaba y pulsa ¡Listo!',vis:w[0]+' '+w[1],n:w[2].length,say:w[1]}}},
@@ -197,7 +208,7 @@ const L1=[
  {name:'Singular y plural',icon:'👥',gen:d=>{const p=pick(PLURAL1);const wr=[p[0],p[1].replace(/^(los|las)/,m=>m==='los'?'las':'los'),p[0]+'s'];return mc(`${p[0]} → ¿cómo se dice si son varios?`,p[1],wr)}},
  {name:'Mayúsculas',icon:'🔠',gen:d=>{const m=pick(MAYUS);return mc('¿Cuál está bien escrita?',m[0],[m[1],m[0].toUpperCase()])}},
  {name:'Rimas',icon:'🎵',gen:d=>{if(Math.random()<.6){const rs=shuffle(RIMAS).slice(0,4);return pairsQ('Une las palabras que riman',rs.map(r=>[r[0],r[1]]))}const r=pick(RIMAS);return mc(`¿Qué palabra rima con «${r[0]}»?`,r[1],r[2])}},
- {name:'Construye palabras',icon:'🧱',gen:d=>{const w=pick(WORDS1.filter(x=>x[1].length>=3&&x[1].length<=6));const t=[...w[1]];return {type:'build',q:'Toca o arrastra las letras para escribir la palabra',vis:w[0],tiles:scr(t),target:t,join:''}}}
+ {name:'Construye palabras',icon:'🧱',gen:d=>{const w=pick(WORDS1.filter(x=>x[1].length>=3&&x[1].length<=6));if(Math.random()<.4)return {type:'write',q:'Escribe la palabra que ves',vis:w[0],answer:w[1]};const t=[...w[1]];return {type:'build',q:'Toca o arrastra las letras para escribir la palabra',vis:w[0],tiles:scr(t),target:t,join:''}}}
 ];
 const L2=[
  {name:'Sinónimos y antónimos',icon:'🔁',gen:d=>{const r=Math.random();
@@ -209,13 +220,13 @@ const L2=[
  {name:'Plurales',icon:'👥',gen:d=>{const p=pick(PLURAL2);return mc(`Plural de «${p[0]}»`,p[1],[p[0]+'s',p[0]+'es',p[0].slice(0,-1)+'s'].filter(x=>x!==p[1]).concat([p[0].slice(0,-1)+'ses']))}},
  {name:'B o V',icon:'🅱️',gen:d=>{const w=pick(BV);const i=w[1].indexOf(w[0]);return mc('¿Con B o con V?',w[0].toUpperCase(),['B','V'],w[1].slice(0,i)+'＿'+w[1].slice(i+1))}},
  {name:'Con H o sin H',icon:'🤫',gen:d=>{const w=pick(HH);const wr=w[0]?w[1].slice(1):'h'+w[1];return mc('¿Cuál está bien escrita?',w[1],[wr])}},
- {name:'Ordena la frase',icon:'🧵',gen:d=>{const f=pick(['El gato duerme en el sofá','Mi hermana come una manzana','Los niños juegan en el parque','La luna brilla de noche','Ana lee un libro divertido','El perro corre por el jardín']);const w=f.split(' ');return {type:'build',q:'Toca o arrastra las palabras para ordenar la frase',tiles:scr(w),target:w,join:' '}}},
+ {name:'Ordena la frase',icon:'🧵',gen:d=>{const nm=(S&&!/\s/.test(S.name))?esc(S.name):'Leo';const f=pick(['Cristiano marca un gol','El coche rojo corre mucho','Mi equipo gana la copa','Turbo gira en la curva',nm+' juega con su coche',nm+' chuta el balón','El portero para el balón','La luna brilla de noche']);const w=f.split(' ');return {type:'build',q:'Toca o arrastra las palabras para ordenar la frase',tiles:scr(w),target:w,join:' '}}},
  {name:'Nombre, verbo, adjetivo',icon:'🏷️',gen:d=>{const cats=['nombre','verbo','adjetivo'];const ws=cats.flatMap(c=>shuffle(CLASES.filter(x=>x[1]===c)).slice(0,2).map(x=>({w:x[0],c})));return {type:'sort',q:'Lleva cada palabra a su cesta',cats,words:shuffle(ws)}}},
  {name:'Orden alfabético',icon:'🔡',gen:d=>{const ws=shuffle(ABC).slice(0,4);return {type:'order',q:'Toca las palabras en ORDEN ALFABÉTICO (la primera es la de la A)',items:ws,sorted:ws.slice().sort((a,b)=>a.localeCompare(b,'es'))}}},
- {name:'Escribe bien',icon:'✍️',gen:d=>{const E=[['🐄','vaca'],['🫏','burro'],['🍇','uva'],['⛵','barco'],['🥚','huevo'],['🐜','hormiga'],['🍦','helado'],['🧊','hielo'],['🍃','hoja'],['🐻','oso'],['🏝️','isla'],['👁️','ojo'],['🕯️','vela'],['☁️','nube'],['🥣','vaso'],['🍼','bebé'],['🎳','bola'],['❄️','nieve'],['🔔','bote']];const w=pick(E);const t=[...w[1]];return {type:'build',q:'Toca o arrastra las letras para escribir lo que ves',vis:w[0],tiles:scr(t),target:t,join:''}}}
+ {name:'Escribe bien',icon:'✍️',gen:d=>{const E=[['🐄','vaca'],['🫏','burro'],['🍇','uva'],['⛵','barco'],['🥚','huevo'],['🐜','hormiga'],['🍦','helado'],['🧊','hielo'],['🍃','hoja'],['🐻','oso'],['🏝️','isla'],['👁️','ojo'],['🕯️','vela'],['☁️','nube'],['🥣','vaso'],['🍼','bebé'],['🎳','bola'],['❄️','nieve'],['🔔','bote']];const w=pick(E);if(Math.random()<.4)return {type:'write',q:'Escribe lo que ves',vis:w[0],answer:w[1]};const t=[...w[1]];return {type:'build',q:'Toca o arrastra las letras para escribir lo que ves',vis:w[0],tiles:scr(t),target:t,join:''}}}
 ];
 const CONT={'1':{mates:M1,lengua:L1},'2':{mates:M2,lengua:L2}};
-const SUBJ={mates:{name:'Matemáticas',icon:'🧮',col:'#4c6ef5'},lengua:{name:'Lengua',icon:'📚',col:'#f76707'}};
+const SUBJ={mates:{name:'Matemáticas',icon:'🏎️',story:'La Copa Turbo',col:'#4c6ef5'},lengua:{name:'Lengua',icon:'⚽',story:'La Copa del Gol',col:'#f76707'}};
 const AVATARS=['🦊','🐼','🐯','🦁','🐸','🦄','🐙','🚀'];
 const PREMIOS=[['🎩',20],['😎',40],['👑',70],['🏆',110]];
 
@@ -273,9 +284,9 @@ function home(){
   const prize=S.prizes.map(p=>p).join('');
   render(`${topbar()}
   <h1>${S.avatar}${prize} ¡Hola, ${esc(S.name)}!</h1>
-  <div class="card" style="text-align:center">Llevas <b>${totalStars} ⭐</b> y <b>${S.coins} 🪙</b></div>
+  <div class="card" style="text-align:center">${esc(S.name)}, hoy entrenas como Cristiano ⚽ y conduces como un campeón 🏎️<br>Llevas <b>${totalStars} ⭐</b> y <b>${S.coins} 🪙</b></div>
   ${Object.keys(SUBJ).map(k=>`<div class="card subj" data-s="${k}" style="cursor:pointer;border-left:10px solid ${SUBJ[k].col}">
-    <span class="ic">${SUBJ[k].icon}</span><div>${SUBJ[k].name}<div class="stars" style="font-size:1rem;font-weight:400">${subjStars(k)} / ${CONT[S.grade][k].length*3} ⭐</div></div></div>`).join('')}
+    <span class="ic">${SUBJ[k].icon}</span><div>${SUBJ[k].story}<div style="font-size:.9rem;font-weight:400">${SUBJ[k].name}</div><div class="stars" style="font-size:1rem;font-weight:400">${subjStars(k)} / ${CONT[S.grade][k].length*3} ⭐</div></div></div>`).join('')}
   <button class="btn orange" id="shop">🎁 Tienda de premios</button>
   <button class="btn grey" id="par">👨‍👩‍👦 Panel de padres</button>`);
   $.querySelectorAll('[data-s]').forEach(e=>e.onclick=()=>map(e.dataset.s));
@@ -287,14 +298,14 @@ const subjStars=k=>CONT[S.grade][k].reduce((a,_,i)=>a+(S.stars[`${S.grade}-${k}-
 function map(k){
   const L=CONT[S.grade][k];
   const cur=L.findIndex((_,j)=>!(S.stars[`${S.grade}-${k}-${j}`]||0));
-  render(`${topbar(true)}<h1>${SUBJ[k].icon} ${SUBJ[k].name}</h1>
+  render(`${topbar(true)}<h1>${SUBJ[k].icon} ${SUBJ[k].story}</h1>
   <div class="map">${L.map((l,i)=>{
     const st=S.stars[`${S.grade}-${k}-${i}`]||0;
     const un=i===0||(S.stars[`${S.grade}-${k}-${i-1}`]||0)>0;
     return `<div class="lvl ${un?'':'locked'}" data-i="${i}">${i===cur?`<div class="me">${S.avatar}</div>`:''}<div class="ic">${un?l.icon:'🔒'}</div>${i+1}. ${l.name}<div class="stars">${stars(st)}</div></div>`}).join('')}</div>
-  <p style="text-align:center">Consigue al menos 1 ⭐ para abrir el siguiente nivel.</p>`);
+  <p style="text-align:center">Cada nivel es un capítulo. Consigue al menos 1 ⭐ para abrir el siguiente.</p>`);
   $.querySelector('#back').onclick=home;
-  $.querySelectorAll('.lvl:not(.locked)').forEach(e=>e.onclick=()=>play(k,+e.dataset.i));
+  $.querySelectorAll('.lvl:not(.locked)').forEach(e=>e.onclick=()=>intro(k,+e.dataset.i));
 }
 
 /* ============ motor interactivo ============ */
@@ -486,8 +497,99 @@ function confetti(k){
   document.body.appendChild(f);setTimeout(()=>f.remove(),2600);
 }
 
+/* ============ historia, escritura con lápiz y pizarra ============ */
+const CH={
+ mates:[
+  ['🏎️','El taller de Turbo','{n}, tu coche Turbo se ha quedado sin gasolina justo antes de la Copa. Para arrancarlo tienes que resolver un reto.'],
+  ['🚦','La parrilla de salida','Los coches están en la línea de salida. {n}, el semáforo está a punto de ponerse en verde, pero la pista tiene un acertijo.'],
+  ['🧱','El mundo de bloques','Turbo te lleva a un mundo de bloques, como los de Roblox, donde cada puerta se abre con un reto. ¿Puedes abrirlas todas, {n}?'],
+  ['🔧','Boxes de emergencia','¡Pinchazo! {n}, entra en boxes y arregla la rueda superando el reto antes de que te adelanten.'],
+  ['🌙','La carrera nocturna','Es de noche y los faros de Turbo solo alumbran si aciertas. {n}, ¡no te salgas de la pista!'],
+  ['🌉','El puente roto','Un puente roto bloquea el camino. Cada acierto coloca una tabla. ¡Ánimo, {n}!'],
+  ['🏙️','Gran Premio de la ciudad','Toda la ciudad te anima, {n}. Las calles están llenas de retos y de aficionados.'],
+  ['❄️','La pista de hielo','La pista resbala. Turbo necesita que pienses con calma, {n}, y que no te precipites.'],
+  ['🛠️','El súper garaje','En el garaje secreto hay piezas para mejorar a Turbo. Cada reto superado desbloquea una pieza, {n}.'],
+  ['⛽','La última gasolinera','Casi sin gasolina, {n}. Solo si superas este reto llegarás a la meta.'],
+  ['🏆','La gran final','¡Última curva, {n}! Si superas este reto, ganarás la Copa Turbo.']
+ ],
+ lengua:[
+  ['⚽','El primer entrenamiento','{n}, hoy entrenas como Cristiano: con constancia y mucha práctica. El míster te da una misión con palabras.'],
+  ['👕','El vestuario','En el vestuario hay camisetas con palabras mezcladas. {n}, tienes que ponerlas en orden antes del partido.'],
+  ['📋','La convocatoria','El míster ha escrito la lista de convocados, {n}, pero las letras se han mezclado. ¡Arréglala!'],
+  ['🥅','El calentamiento','Antes de salir al campo hay que calentar. Un reto rápido para la cabeza, {n}.'],
+  ['🏟️','El partido amistoso','El estadio ya está lleno. {n}, el partido empieza y necesitas acertar para pasar el balón.'],
+  ['🎯','La tanda de penaltis','Todo se decide en los penaltis. Cada acierto es un gol, {n}. ¡Mantén la calma!'],
+  ['🔁','El cambio decisivo','El míster te llama, {n}: entras al campo en el minuto 80 y hay que acertar rápido.'],
+  ['🥈','La semifinal','Falta poco para la final. {n}, un reto más y el equipo pasa de ronda.'],
+  ['🏆','La final de la Copa del Gol','¡La final, {n}! La afición canta tu nombre. Supera este reto y levanta la copa.'],
+  ['🌟','El campeón','Eres el capitán del equipo, {n}. Un último reto para demostrar que eres campeón.']
+ ]
+};
+const OUTRO={
+ mates:{win:'Turbo ruge de alegría, {n}: ¡brum, brum! 🏎️💨 Capítulo superado.',lose:'Turbo necesita otro intento, {n}. ¡Tú puedes!'},
+ lengua:{win:'¡GOOOL! ⚽ La afición grita tu nombre, {n}. Capítulo superado.',lose:'El míster dice: ¡otra vez, {n}! Los campeones no se rinden.'}
+};
+const ch=(k,i)=>CH[k][Math.min(i,CH[k].length-1)];
+const tell=(t)=>t.replace(/\{n\}/g,S.name);
+
+/* escribir la respuesta (con Apple Pencil el iPad convierte la letra a texto: Scribble) */
+R.write=(q,st,done)=>{
+  st.innerHTML=`<div class="vis">${q.vis||''}</div>
+  <input id="wi" class="wi" type="text" ${q.numeric?'inputmode="numeric"':''} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="✏️ Escribe aquí">
+  <button class="btn green" id="ok">Comprobar ✅</button>`;
+  const norm=s=>String(s).trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const inp=st.querySelector('#wi'),ok=st.querySelector('#ok');
+  const check=()=>{
+    if(!inp.value.trim()){shakeEl(inp);return}
+    inp.disabled=true;ok.disabled=true;
+    const good=norm(inp.value)===norm(q.answer);
+    inp.classList.add(good?'okw':'badw');
+    done(good,`era «${q.answer}»`);
+  };
+  ok.onclick=check;
+  inp.onkeydown=e=>{if(e.key==='Enter')check()};
+};
+
+/* pizarra para hacer cuentas a mano (lápiz o dedo). Si se detecta lápiz, se ignora la palma */
+function pad(box){
+  box.innerHTML=`<canvas class="pad" width="640" height="320"></canvas>
+  <div class="row"><button class="btn small grey" data-c="#2b2d42">⚫</button><button class="btn small grey" data-c="#e03131">🔴</button><button class="btn small grey" data-c="#1c7ed6">🔵</button><button class="btn small orange" id="pc">🧽 Borrar</button></div>`;
+  const c=box.querySelector('canvas'),x=c.getContext('2d');
+  x.lineCap='round';x.lineJoin='round';let col='#2b2d42',pen=false,on=false,last=null;
+  const pos=e=>{const r=c.getBoundingClientRect();return [(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};
+  c.onpointerdown=e=>{
+    if(e.pointerType==='pen')pen=true;
+    if(e.pointerType==='touch'&&pen)return;
+    on=true;last=pos(e);try{c.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault();
+    x.fillStyle=col;x.beginPath();x.arc(last[0],last[1],2.5,0,7);x.fill();
+  };
+  c.onpointermove=e=>{
+    if(!on||(e.pointerType==='touch'&&pen))return;
+    const p=pos(e);x.strokeStyle=col;x.lineWidth=e.pointerType==='pen'?2+(e.pressure||.5)*6:5;
+    x.beginPath();x.moveTo(last[0],last[1]);x.lineTo(p[0],p[1]);x.stroke();last=p;
+  };
+  c.onpointerup=c.onpointercancel=()=>{on=false};
+  box.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{col=b.dataset.c});
+  box.querySelector('#pc').onclick=()=>x.clearRect(0,0,c.width,c.height);
+}
+
+/* pantalla de historia antes de cada nivel */
+function intro(k,i){
+  const c=ch(k,i),lv=CONT[S.grade][k][i],txt=tell(c[2]);
+  render(`${topbar(true)}<div class="card story"><div class="big">${c[0]}</div>
+  <div class="chap">Capítulo ${i+1}</div><h1>${c[1]}</h1>
+  <p class="tale">${esc(txt)}</p><div class="mission">🎯 Misión: ${lv.name}</div>
+  <button class="btn green" id="go">▶️ ¡Vamos, ${esc(S.name)}!</button>
+  <button class="btn small grey" id="rd">🔊 Leer la historia</button></div>`);
+  $.querySelector('#back').onclick=()=>map(k);
+  $.querySelector('#go').onclick=()=>{try{speechSynthesis.cancel()}catch(_){}play(k,i)};
+  const say=()=>speak(`${c[1]}. ${txt} Misión: ${lv.name}`);
+  $.querySelector('#rd').onclick=say;
+  if(S.grade==='1')say();
+}
+
 function play(k,i){
-  const lv=CONT[S.grade][k][i];const N=10;let n=0,ok=0,streak=0,seen=new Set();
+  const lv=CONT[S.grade][k][i];const N=10;let n=0,ok=0,streak=0,seen=new Set(),padOpen=false;
   const next=()=>{
     if(n>=N)return finish();
     const d=n/(N-1);let q,t=0;
@@ -496,19 +598,25 @@ function play(k,i){
     const type=q.type||'mc';
     render(`${topbar(true)}
     <div class="bar"><div style="width:${n/N*100}%"></div></div>
-    <div class="card"><div class="top"><span>Pregunta ${n+1}/${N}</span><button class="btn small" id="say">🔊 Escuchar</button></div>
-    <div class="q">${q.q}</div><div id="stage"></div><div class="fb" id="fb"></div></div>`);
+    <div class="card"><div class="top"><span>Pregunta ${n+1}/${N}</span>
+      <span><button class="btn small orange" id="pd">✏️ Pizarra</button> <button class="btn small" id="say">🔊</button></span></div>
+    <div class="q">${q.q}</div><div id="stage"></div><div id="padbox" class="padbox"></div><div class="fb" id="fb"></div></div>`);
     $.querySelector('#back').onclick=()=>map(k);
     const txt=q.q+'. '+((q.vis||'').replace(/(\p{Extended_Pictographic}️?)+/gu,' '));
     $.querySelector('#say').onclick=()=>speak(txt);
-    if(S.grade==='1')speak(txt);
+    const pb=$.querySelector('#padbox');
+    $.querySelector('#pd').onclick=()=>{padOpen=!padOpen;if(padOpen)pad(pb);else pb.innerHTML=''};
+    if(padOpen)pad(pb);
+    if(S.grade==='1')speak((n===0?S.name+'. ':'')+txt);
     let locked=false;
     const answer=(good,extra)=>{
       if(locked)return;locked=true;
       S.stats[k]=S.stats[k]||{ok:0,total:0};S.stats[k].total++;
-      const fb=$.querySelector('#fb');
-      if(good){ok++;streak++;S.stats[k].ok++;fb.textContent=pick(['¡Muy bien! 🎉','¡Genial! 🌟','¡Eso es! 👏','¡Correcto! 💪']);if(streak>=3)fb.textContent+=` 🔥 Racha de ${streak}`;beep(true);confetti(10)}
-      else{streak=0;fb.textContent='Casi… '+(extra||'')+' 💡';beep(false)}
+      const fb=$.querySelector('#fb'),nm=S.name;
+      if(good){ok++;streak++;S.stats[k].ok++;
+        fb.textContent=pick([`¡Muy bien, ${nm}! 🎉`,`¡Genial, ${nm}! 🌟`,'¡Eso es! 👏',`¡Correcto, ${nm}! 💪`,`¡Golazo, ${nm}! ⚽`,`¡Brum, brum! 🏎️`]);
+        if(streak>=3)fb.textContent+=` 🔥 Racha de ${streak}`;beep(true);confetti(10)}
+      else{streak=0;fb.textContent=`Casi, ${nm}… `+(extra||'')+' 💡';beep(false)}
       fb.classList.add('pop');save();n++;setTimeout(next,good?1100:2400);
     };
     R[type](q,$.querySelector('#stage'),answer);
@@ -519,17 +627,21 @@ function play(k,i){
     const gain=ok*2+(st>prev?(st-prev)*5:0);
     if(st>prev)S.stars[key]=st;S.coins+=gain;S.played++;save();
     const last=i===CONT[S.grade][k].length-1;
-    render(`${topbar()}<div class="card"><div class="big">${st>0?'🎉':'💪'}</div>
-    <h1>${st>0?'¡Nivel superado!':'¡Casi lo consigues!'}</h1>
+    const story=tell(OUTRO[k][st>0?'win':'lose']);
+    render(`${topbar()}<div class="card"><div class="big">${st>0?ch(k,i)[0]:'💪'}</div>
+    <h1>${st>0?'¡Capítulo superado!':'¡Casi lo consigues, '+esc(S.name)+'!'}</h1>
+    <p class="tale">${esc(story)}</p>
     <div class="q">${ok} de ${N} bien</div><div class="big stars">${stars(st)}</div>
     <div class="q">+${gain} 🪙</div>
     ${st===0?'<p style="text-align:center">Necesitas 5 aciertos para ganar una estrella. ¡Otra vez!</p>':''}
+    ${st>0&&last?'<p class="tale">🏆 ¡Has terminado la historia!</p>':''}
     <button class="btn green" id="again">🔁 Repetir</button>
-    ${st>0&&!last?'<button class="btn" id="nx">➡️ Siguiente nivel</button>':''}
+    ${st>0&&!last?'<button class="btn" id="nx">➡️ Siguiente capítulo</button>':''}
     <button class="btn grey" id="mp">🗺️ Volver al mapa</button></div>`);
     if(st>0)confetti(st*14);
+    if(S.grade==='1')speak(story);
     $.querySelector('#again').onclick=()=>play(k,i);
-    const nx=$.querySelector('#nx');if(nx)nx.onclick=()=>play(k,i+1);
+    const nx=$.querySelector('#nx');if(nx)nx.onclick=()=>intro(k,i+1);
     $.querySelector('#mp').onclick=()=>map(k);
   };
   next();
@@ -555,6 +667,7 @@ function parents(){
   <div class="card"><b>Jugador:</b> ${esc(S.name)} · ${S.grade}.º de Primaria<br><b>Partidas:</b> ${S.played}<br>
   <b>Aciertos Matemáticas:</b> ${acc('mates')}<br><b>Aciertos Lengua:</b> ${acc('lengua')}</div>
   <div class="card"><table><tr><th>Curso</th><th>Área</th><th>Nivel</th><th>Nota</th></tr>${rows}</table></div>
+  <div class="card"><b>Lápiz (iPad):</b> en los retos de «Escribe» el niño puede escribir con Apple Pencil: el iPad convierte la letra a texto (Ajustes → Apple Pencil → Scribble). El botón ✏️ Pizarra permite hacer cuentas a mano con cualquier lápiz o con el dedo.</div>
   <div class="card"><b>Cambiar de curso</b> (conserva el progreso de ambos):
   <button class="btn" id="sw">Pasar a ${S.grade==='1'?'2.º':'1.º'} de Primaria</button>
   <button class="link" id="rs">Borrar todo el progreso</button><span id="rsq"></span></div>`);
