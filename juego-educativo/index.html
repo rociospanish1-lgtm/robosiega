@@ -141,8 +141,8 @@ const PREMIOS=[['🎩',20],['😎',40],['👑',70],['🏆',110]];
 
 /* ============ estado ============ */
 const KEY='aventura-saber-v1';
-let S=JSON.parse(localStorage.getItem(KEY)||'null');
-const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const $=document.getElementById('app');
 const stars=(n)=>'⭐'.repeat(n)+'☆'.repeat(3-n);
 
@@ -262,14 +262,14 @@ function play(k,i){
   next();
 }
 
-function shop(){
-  render(`${topbar(true)}<h1>🎁 Tienda</h1><p style="text-align:center">Estos premios se ponen junto a tu compañero.</p>
+function shop(msg){
+  render(`${topbar(true)}<h1>🎁 Tienda</h1><p style="text-align:center">${msg||'Estos premios se ponen junto a tu compañero.'}</p>
   ${PREMIOS.map(([e,c])=>{const own=S.prizes.includes(e);return `<div class="card subj"><span class="ic">${e}</span><div style="flex:1">${c} 🪙</div>
   <button class="btn small ${own?'grey':'green'}" data-e="${e}" data-c="${c}">${own?'Tuyo ✓':'Comprar'}</button></div>`}).join('')}`);
   $.querySelector('#back').onclick=home;
   $.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>{
     const e=b.dataset.e,c=+b.dataset.c;if(S.prizes.includes(e))return;
-    if(S.coins<c){alert('Aún no tienes monedas suficientes. ¡Sigue jugando!');return}
+    if(S.coins<c){shop('Aún no tienes monedas suficientes. ¡Sigue jugando! 💪');return}
     S.coins-=c;S.prizes.push(e);save();shop();
   });
 }
@@ -284,10 +284,10 @@ function parents(){
   <div class="card"><table><tr><th>Curso</th><th>Área</th><th>Nivel</th><th>Nota</th></tr>${rows}</table></div>
   <div class="card"><b>Cambiar de curso</b> (conserva el progreso de ambos):
   <button class="btn" id="sw">Pasar a ${S.grade==='1'?'2.º':'1.º'} de Primaria</button>
-  <button class="link" id="rs">Borrar todo el progreso</button></div>`);
+  <button class="link" id="rs">Borrar todo el progreso</button><span id="rsq"></span></div>`);
   $.querySelector('#back').onclick=home;
   $.querySelector('#sw').onclick=()=>{S.grade=S.grade==='1'?'2':'1';save();home()};
-  $.querySelector('#rs').onclick=()=>{if(confirm('¿Seguro que quieres borrar todo el progreso?')){localStorage.removeItem(KEY);S=null;start()}};
+  $.querySelector('#rs').onclick=()=>{$.querySelector('#rsq').innerHTML=' <b>¿Seguro?</b> <button class="link" id="rs2">Sí, borrar</button>';$.querySelector('#rs2').onclick=()=>{try{localStorage.removeItem(KEY)}catch(e){}S=null;start()}};
 }
 start();
 </script>
