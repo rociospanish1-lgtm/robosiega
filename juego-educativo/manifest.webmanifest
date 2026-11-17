@@ -1,0 +1,15 @@
+{
+  "name": "Aventura del Saber",
+  "short_name": "Aventura",
+  "description": "Matemáticas y Lengua para 1.º y 2.º de Primaria",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#bde7ff",
+  "theme_color": "#4c6ef5",
+  "lang": "es",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
